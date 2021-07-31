@@ -10,6 +10,12 @@ Widget appBarMain(BuildContext context) {
   );
 }
 
+Widget appBarChat(String name) {
+  return AppBar(
+    title: Text(name),
+  );
+}
+
 InputDecoration textFieldInputDecoration(String hintText){
   return InputDecoration(
     hintText: hintText,

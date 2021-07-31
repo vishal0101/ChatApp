@@ -2,6 +2,7 @@ import 'package:chat_app/helper/constants.dart';
 import 'package:chat_app/services/database.dart';
 import 'package:chat_app/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:chat_app/helper/constants.dart';
 import 'package:flutter/material.dart';
 
 class ConversationScreen extends StatefulWidget {
@@ -10,10 +11,13 @@ class ConversationScreen extends StatefulWidget {
   ConversationScreen(this.chatRoomId);
 
   @override
-  _ConversationScreenState createState() => _ConversationScreenState();
+  _ConversationScreenState createState() => _ConversationScreenState(chatRoomId);
 }
 
 class _ConversationScreenState extends State<ConversationScreen> {
+
+  String chatRoomId;
+  _ConversationScreenState(this.chatRoomId);
 
   DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController messageController = new TextEditingController();
@@ -61,18 +65,35 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: appBarChat(chatRoomId.replaceAll("_", "")
+          .replaceAll(Constants.myName, "")),
       body: Container(
-        child: Stack(
+        color: Color(0xFF171717),
+        child: Column(
           children: [
-            Container(
+            Expanded(
                 child: ChatMessageList()
             ),
             Container(
               alignment: Alignment.bottomCenter,
               child: Container(
-                color: Color(0x54FFFFFF),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                decoration: BoxDecoration(
+                  //color: Color(0xBF007ef4),
+                  gradient: LinearGradient(
+                      colors: [
+                        const Color(0x99007ef4),
+                        const Color(0x99007fff)
+                        //const Color(0xff171717),
+                       // const Color(0x1AFFFFFF)
+                  ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter
+
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: EdgeInsets.only(left: 8, top: 2, right: 8, bottom: 8),
                 child: Row(
                   children: [
                     Expanded(
@@ -132,7 +153,7 @@ class MesageTile extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       alignment: isSendByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: isSendByMe ? [
@@ -145,14 +166,14 @@ class MesageTile extends StatelessWidget {
           ),
           borderRadius: isSendByMe ?
               BorderRadius.only(
-                topLeft: Radius.circular(23),
-                topRight: Radius.circular(23),
-                bottomLeft: Radius.circular(23)
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20)
               ) :
           BorderRadius.only(
-              topLeft: Radius.circular(23),
-              topRight: Radius.circular(23),
-              bottomRight: Radius.circular(23)
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20)
           )
         ),
         child: Text(message, style: TextStyle(

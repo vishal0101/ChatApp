@@ -30,12 +30,13 @@ class _ChatRoomState extends State<ChatRoom> {
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   print("User...");
+                  String name = snapshot.data.docs[index]
+                      .data()["chatroomId"]
+                      .toString()
+                      .replaceAll("_", "")
+                      .replaceAll(Constants.myName, "");
                   return ChatRoomTile(
-                      snapshot.data.docs[index]
-                          .data()["chatroomId"]
-                          .toString()
-                          .replaceAll("_", "")
-                          .replaceAll(Constants.myName, ""),
+                      name,
                       snapshot.data.docs[index].data()["chatroomId"]);
                 })
             : Container();
@@ -80,7 +81,10 @@ class _ChatRoomState extends State<ChatRoom> {
           )
         ],
       ),
-      body: chatRoomList(),
+      body: Container(
+        color: Colors.black26,
+          child: chatRoomList()
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
@@ -107,28 +111,36 @@ class ChatRoomTile extends StatelessWidget {
                 builder: (context) => ConversationScreen(chatRoomId)));
       },
       child: Container(
-        color: Colors.black26,
+        // decoration: BoxDecoration(
+        //   border: Border.all(color: Colors.white),
+        //   borderRadius: BorderRadius.all(Radius.circular(80))
+        // ),
+        // color: Colors.black26,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Row(
+        child: Column(
           children: [
-            Container(
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(40)),
-              child: Text(
-                "${userName.substring(0, 1).toUpperCase()}",
-                style: mediumTextStyle(),
-              ),
+            Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.blue, borderRadius: BorderRadius.circular(40)),
+                  child: Text(
+                    "${userName.substring(0, 1).toUpperCase()}",
+                    style: mediumTextStyle(),
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  userName,
+                  style: mediumTextStyle(),
+                )
+              ],
             ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              userName,
-              style: mediumTextStyle(),
-            )
           ],
         ),
       ),
