@@ -19,6 +19,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
   Stream chatRoomStream;
 
+  String userName = Constants.myName;
+
   Widget chatRoomList() {
     print("Name1");
     return StreamBuilder(
@@ -36,8 +38,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       .replaceAll("_", "")
                       .replaceAll(Constants.myName, "");
                   return ChatRoomTile(
-                      name,
-                      snapshot.data.docs[index].data()["chatroomId"]);
+                      name, snapshot.data.docs[index].data()["chatroomId"]);
                 })
             : Container();
       },
@@ -81,10 +82,35 @@ class _ChatRoomState extends State<ChatRoom> {
           )
         ],
       ),
-      body: Container(
-        color: Colors.black26,
-          child: chatRoomList()
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Column(
+                  children: [
+                    Image(image: AssetImage("assets/images/search_white.png")),
+                    Text(userName.toLowerCase())
+                  ],
+                )),
+            ListTile(
+              title: Row(children: [
+                Text("Logout"),
+                Icon(Icons.exit_to_app, color: Colors.blue)
+              ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              onTap: () {
+                authMethods.signOut();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Authenticate()));
+              },
+            )
+          ],
+        ),
       ),
+      body: Container(color: Colors.black26, child: chatRoomList()),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
@@ -126,7 +152,8 @@ class ChatRoomTile extends StatelessWidget {
                   width: 40,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: Colors.blue, borderRadius: BorderRadius.circular(40)),
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(40)),
                   child: Text(
                     "${userName.substring(0, 1).toUpperCase()}",
                     style: mediumTextStyle(),
